@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2018)
+# API for the lotto numbers of the german lottery (1955-2019)
 
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
@@ -52,10 +52,10 @@ lottonumbers_count %>%
 ##   value count
 ##   <int> <int>
 ## 1     6   581
-## 2    32   564
+## 2    32   565
 ## 3    49   562
 ## 4    26   559
-## 5    38   553
+## 5    38   554
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -95,6 +95,31 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 
 <img src="README_figs/README-unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
+What were the numbers most chosen in 2018?
+
+``` r
+data$data %>% 
+  filter(variable == "Lottozahl") %>% 
+  mutate(date = dmy(date),
+         year = year(date)) %>% 
+  filter(year == 2018) %>% 
+  group_by(value) %>% 
+  summarise(count = n()) %>% 
+   arrange(desc(count)) %>% 
+  top_n(5)
+## Selecting by count
+## # A tibble: 7 x 2
+##   value count
+##   <int> <int>
+## 1     3    22
+## 2    31    20
+## 3     6    19
+## 4    47    19
+## 5    13    17
+## 6    29    17
+## 7    37    17
+```
+
 ### Python
 
 In python the module [pandas](http://pandas.pydata.org) is very handy to
@@ -108,9 +133,9 @@ res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_
 print(res.head(5))
 ## value
 ## 6     581
-## 32    564
+## 32    565
 ## 49    562
 ## 26    559
-## 38    553
+## 38    554
 ## Name: value, dtype: int64
 ```
