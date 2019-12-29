@@ -51,11 +51,11 @@ lottonumbers_count %>%
 ## # A tibble: 5 x 2
 ##   value count
 ##   <int> <int>
-## 1     6   581
-## 2    32   565
-## 3    49   562
-## 4    26   559
-## 5    38   554
+## 1     6   593
+## 2    32   573
+## 3    49   571
+## 4    38   568
+## 5    26   567
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -95,14 +95,14 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 
 <img src="README_figs/README-unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
-What were the numbers most chosen in 2018?
+What were the numbers most chosen in 2019?
 
 ``` r
 data$data %>% 
   filter(variable == "Lottozahl") %>% 
   mutate(date = dmy(date),
          year = year(date)) %>% 
-  filter(year == 2018) %>% 
+  filter(year == 2019) %>% 
   group_by(value) %>% 
   summarise(count = n()) %>% 
    arrange(desc(count)) %>% 
@@ -111,13 +111,13 @@ data$data %>%
 ## # A tibble: 7 x 2
 ##   value count
 ##   <int> <int>
-## 1     3    22
-## 2    31    20
-## 3     6    19
-## 4    47    19
-## 5    13    17
-## 6    29    17
-## 7    37    17
+## 1    42    22
+## 2    29    20
+## 3    36    18
+## 4    11    17
+## 5    19    17
+## 6    31    17
+## 7    47    17
 ```
 
 ### Python
@@ -128,14 +128,17 @@ executed.
 
 ``` python
 import pandas as pd
+
 data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json",orient='split')
+
 res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_values(ascending = False)
+
 print(res.head(5))
 ## value
-## 6     581
-## 32    565
-## 49    562
-## 26    559
-## 38    554
+## 6     593
+## 32    573
+## 49    571
+## 38    568
+## 26    567
 ## Name: value, dtype: int64
 ```

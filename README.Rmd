@@ -85,14 +85,14 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
   labs(x = "Zusatzzahl", title = "Zusatzzahl since 2001")
 ```
 
-What were the numbers most chosen in 2018?
+What were the numbers most chosen in 2019?
 
 ```{r}
 data$data %>% 
   filter(variable == "Lottozahl") %>% 
   mutate(date = dmy(date),
          year = year(date)) %>% 
-  filter(year == 2018) %>% 
+  filter(year == 2019) %>% 
   group_by(value) %>% 
   summarise(count = n()) %>% 
    arrange(desc(count)) %>% 
