@@ -48,14 +48,15 @@ lottonumbers_count %>%
   arrange(desc(count)) %>% 
   top_n(5)
 ## Selecting by count
-## # A tibble: 5 x 2
+## # A tibble: 6 x 2
 ##   value count
 ##   <int> <int>
 ## 1     6   593
-## 2    32   573
-## 3    49   571
+## 2    32   575
+## 3    49   573
 ## 4    38   568
 ## 5    26   567
+## 6    31   567
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -136,8 +137,8 @@ res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_
 print(res.head(5))
 ## value
 ## 6     593
-## 32    573
-## 49    571
+## 32    575
+## 49    573
 ## 38    568
 ## 26    567
 ## Name: value, dtype: int64
