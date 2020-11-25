@@ -13,6 +13,7 @@ knitr::opts_chunk$set(collapse = TRUE,
                       fig.align = "center",
                       fig.path = "README_figs/README-")
 knitr::knit_engines$set(engine.path = '/usr/local/bin/python3')
+library(reticulate)
 ```
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
@@ -40,7 +41,7 @@ library(lubridate)
 
 data <- fromJSON("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
 
-lottonumbers_count <- data$data %>% 
+lottonumbers_count <- data %>% 
   filter(variable == "Lottozahl") %>% 
   group_by(value) %>% 
   summarise(count = n())
@@ -67,7 +68,7 @@ ggplot(lottonumbers_count, aes(value, count)) +
 Since 2001 in the german lottery a number called "Zusatzzahl" was introduced. Every Wednesday and Saturday the number chosen. The following graph shows the distribution of the Zusatzzahl.
 
 ```{r}
-superzahl <- data$data %>% 
+superzahl <- data %>% 
   filter(variable == "Superzahl") %>% 
   mutate(date = dmy(date),
          Day = weekdays(date),
@@ -88,7 +89,7 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 What were the numbers most chosen in 2019?
 
 ```{r}
-data$data %>% 
+data %>% 
   filter(variable == "Lottozahl") %>% 
   mutate(date = dmy(date),
          year = year(date)) %>% 
@@ -107,7 +108,7 @@ In python the module [pandas](http://pandas.pydata.org) is very handy to analyse
 ```{python, engine.path = '/usr/local/bin/python3'}
 import pandas as pd
 
-data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json",orient='split')
+data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
 
 res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_values(ascending = False)
 

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2020)
+# API for the lotto numbers of the german lottery (1955-2019)
 
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
@@ -37,7 +37,7 @@ library(lubridate)
 
 data <- fromJSON("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
 
-lottonumbers_count <- data$data %>% 
+lottonumbers_count <- data %>% 
   filter(variable == "Lottozahl") %>% 
   group_by(value) %>% 
   summarise(count = n())
@@ -48,15 +48,16 @@ lottonumbers_count %>%
   arrange(desc(count)) %>% 
   top_n(5)
 ## Selecting by count
-## # A tibble: 6 x 2
+## # A tibble: 7 x 2
 ##   value count
 ##   <int> <int>
-## 1     6   593
-## 2    32   575
-## 3    49   573
-## 4    38   568
-## 5    26   567
-## 6    31   567
+## 1     6   605
+## 2    49   587
+## 3    32   582
+## 4    38   581
+## 5    11   576
+## 6    31   576
+## 7    33   576
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -76,7 +77,7 @@ introduced. Every Wednesday and Saturday the number chosen. The
 following graph shows the distribution of the Zusatzzahl.
 
 ``` r
-superzahl <- data$data %>% 
+superzahl <- data %>% 
   filter(variable == "Superzahl") %>% 
   mutate(date = dmy(date),
          Day = weekdays(date),
@@ -84,10 +85,10 @@ superzahl <- data$data %>%
   filter(year >= 2001) %>% 
   group_by(value, Day) %>% 
   summarise(count = n())
+## `summarise()` regrouping output by 'value' (override with `.groups` argument)
 ```
 
 ``` r
-
 ggplot(superzahl, aes(value, count, fill = Day)) +
   geom_bar(stat = "identity", position = "dodge") +
   scale_x_continuous(breaks = c(0:9)) +
@@ -99,7 +100,7 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 What were the numbers most chosen in 2019?
 
 ``` r
-data$data %>% 
+data %>% 
   filter(variable == "Lottozahl") %>% 
   mutate(date = dmy(date),
          year = year(date)) %>% 
@@ -108,6 +109,7 @@ data$data %>%
   summarise(count = n()) %>% 
    arrange(desc(count)) %>% 
   top_n(5)
+## `summarise()` ungrouping output (override with `.groups` argument)
 ## Selecting by count
 ## # A tibble: 7 x 2
 ##   value count
@@ -130,16 +132,16 @@ executed.
 ``` python
 import pandas as pd
 
-data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json",orient='split')
+data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
 
 res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_values(ascending = False)
 
 print(res.head(5))
 ## value
-## 6     593
-## 32    575
-## 49    573
-## 38    568
-## 26    567
+## 6     605
+## 49    587
+## 32    582
+## 38    581
+## 33    576
 ## Name: value, dtype: int64
 ```
