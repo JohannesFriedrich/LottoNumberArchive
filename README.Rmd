@@ -4,7 +4,7 @@ output: rmarkdown::github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2019)
+# API for the lotto numbers of the german lottery (1955-2020)
 
 ```{r setup, include=FALSE, echo = FALSE}
 knitr::opts_chunk$set(collapse = TRUE,

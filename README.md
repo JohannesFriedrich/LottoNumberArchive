@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2019)
+# API for the lotto numbers of the german lottery (1955-2020)
 
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
