@@ -48,16 +48,15 @@ lottonumbers_count %>%
   arrange(desc(count)) %>% 
   top_n(5)
 ## Selecting by count
-## # A tibble: 7 x 2
+## # A tibble: 6 x 2
 ##   value count
 ##   <int> <int>
 ## 1     6   605
 ## 2    49   587
-## 3    32   582
+## 3    32   583
 ## 4    38   581
-## 5    11   576
-## 6    31   576
-## 7    33   576
+## 5    11   577
+## 6    33   577
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -140,8 +139,8 @@ print(res.head(5))
 ## value
 ## 6     605
 ## 49    587
-## 32    582
+## 32    583
 ## 38    581
-## 33    576
+## 33    577
 ## Name: value, dtype: int64
 ```
