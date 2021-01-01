@@ -23,12 +23,12 @@ languages. In the following two examples are shown (R and Python).
 
 ### R
 
-The package [tidyverse](https://www.tidyverse.org) is able to analyse
+The package [tidyverse](https://www.tidyverse.org) is able to analyze
 the data very quickly with R.
 
 In the next chunk, all data are read, filtered (just taking the lotto
-numbers) and grouped by the values and counted the number of apperance.
-We can see, that lotto number 6 is the nost frequent number.
+numbers) and grouped by the values and counted the number of appearance.
+We can see, that lotto number 6 is the most frequent number.
 
 ``` r
 library(tidyverse)
@@ -48,15 +48,14 @@ lottonumbers_count %>%
   arrange(desc(count)) %>% 
   top_n(5)
 ## Selecting by count
-## # A tibble: 6 x 2
+## # A tibble: 5 x 2
 ##   value count
 ##   <int> <int>
-## 1     6   605
+## 1     6   606
 ## 2    49   587
-## 3    32   583
-## 4    38   581
-## 5    11   577
-## 6    33   577
+## 3    32   584
+## 4    38   582
+## 5    11   579
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -96,30 +95,28 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 
 <img src="README_figs/README-unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
-What were the numbers most chosen in 2019?
+What were the numbers most chosen in 2020?
 
 ``` r
 data %>% 
   filter(variable == "Lottozahl") %>% 
   mutate(date = dmy(date),
          year = year(date)) %>% 
-  filter(year == 2019) %>% 
+  filter(year == 2020) %>% 
   group_by(value) %>% 
   summarise(count = n()) %>% 
    arrange(desc(count)) %>% 
   top_n(5)
 ## `summarise()` ungrouping output (override with `.groups` argument)
 ## Selecting by count
-## # A tibble: 7 x 2
+## # A tibble: 5 x 2
 ##   value count
 ##   <int> <int>
-## 1    42    22
-## 2    29    20
-## 3    36    18
-## 4    11    17
-## 5    19    17
-## 6    31    17
-## 7    47    17
+## 1    11    25
+## 2     2    21
+## 3     1    18
+## 4    22    18
+## 5     8    17
 ```
 
 ### Python
@@ -137,10 +134,10 @@ res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_
 
 print(res.head(5))
 ## value
-## 6     605
+## 6     606
 ## 49    587
-## 32    583
-## 38    581
-## 33    577
+## 32    584
+## 38    582
+## 11    579
 ## Name: value, dtype: int64
 ```

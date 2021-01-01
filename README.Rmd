@@ -30,9 +30,9 @@ The data provided is a JSON file and readable by all modern software languages. 
 
 ### R
 
-The package [tidyverse](https://www.tidyverse.org) is able to analyse the data very quickly with R.
+The package [tidyverse](https://www.tidyverse.org) is able to analyze the data very quickly with R.
 
-In the next chunk, all data are read, filtered (just taking the lotto numbers) and grouped by the values and counted the number of apperance. We can see, that lotto number 6 is the nost frequent number.
+In the next chunk, all data are read, filtered (just taking the lotto numbers) and grouped by the values and counted the number of appearance. We can see, that lotto number 6 is the most frequent number.
 
 ```{r, message=FALSE}
 library(tidyverse)
@@ -86,14 +86,14 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
   labs(x = "Zusatzzahl", title = "Zusatzzahl since 2001")
 ```
 
-What were the numbers most chosen in 2019?
+What were the numbers most chosen in 2020?
 
 ```{r}
 data %>% 
   filter(variable == "Lottozahl") %>% 
   mutate(date = dmy(date),
          year = year(date)) %>% 
-  filter(year == 2019) %>% 
+  filter(year == 2020) %>% 
   group_by(value) %>% 
   summarise(count = n()) %>% 
    arrange(desc(count)) %>% 
