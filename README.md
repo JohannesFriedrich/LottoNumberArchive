@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2020)
+# API for the lotto numbers of the german lottery (1955-2021)
 
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
@@ -48,14 +48,14 @@ lottonumbers_count %>%
   arrange(desc(count)) %>% 
   top_n(5)
 ## Selecting by count
-## # A tibble: 5 x 2
+## # A tibble: 5 × 2
 ##   value count
 ##   <int> <int>
-## 1     6   606
-## 2    49   587
-## 3    32   584
-## 4    38   582
-## 5    11   579
+## 1     6   623
+## 2    49   600
+## 3    31   593
+## 4    11   590
+## 5    32   590
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -83,7 +83,7 @@ superzahl <- data %>%
   filter(year >= 2001) %>% 
   group_by(value, Day) %>% 
   summarise(count = n())
-## `summarise()` regrouping output by 'value' (override with `.groups` argument)
+## `summarise()` has grouped output by 'value'. You can override using the `.groups` argument.
 ```
 
 ``` r
@@ -95,28 +95,27 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 
 <img src="README_figs/README-unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
-What were the numbers most chosen in 2020?
+What were the numbers most chosen in 2021?
 
 ``` r
 data %>% 
   filter(variable == "Lottozahl") %>% 
   mutate(date = dmy(date),
          year = year(date)) %>% 
-  filter(year == 2020) %>% 
+  filter(year == 2021) %>% 
   group_by(value) %>% 
   summarise(count = n()) %>% 
    arrange(desc(count)) %>% 
   top_n(5)
-## `summarise()` ungrouping output (override with `.groups` argument)
 ## Selecting by count
-## # A tibble: 5 x 2
+## # A tibble: 5 × 2
 ##   value count
 ##   <int> <int>
-## 1    11    25
-## 2     2    21
-## 3     1    18
-## 4    22    18
-## 5     8    17
+## 1     1    22
+## 2    15    22
+## 3     5    20
+## 4    10    20
+## 5    46    18
 ```
 
 ### Python
@@ -134,10 +133,10 @@ res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_
 
 print(res.head(5))
 ## value
-## 6     606
-## 49    587
-## 32    584
-## 38    582
-## 11    579
+## 6     623
+## 49    600
+## 31    593
+## 11    590
+## 32    590
 ## Name: value, dtype: int64
 ```
