@@ -48,14 +48,16 @@ lottonumbers_count %>%
   arrange(desc(count)) %>% 
   top_n(5)
 ## Selecting by count
-## # A tibble: 5 × 2
+## # A tibble: 7 × 2
 ##   value count
 ##   <int> <int>
-## 1     6   633
-## 2    49   621
-## 3    32   608
-## 4    11   605
-## 5    31   600
+## 1     6   646
+## 2    49   632
+## 3    32   620
+## 4    31   615
+## 5    22   614
+## 6    26   614
+## 7    33   614
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -97,27 +99,28 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 
 <img src="README_figs/README-unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
-What were the numbers most chosen in 2022?
+What were the numbers most chosen in 2023?
 
 ``` r
 data %>% 
   filter(variable == "Lottozahl") %>% 
   mutate(date = dmy(date),
          year = year(date)) %>% 
-  filter(year == 2022) %>% 
+  filter(year == 2023) %>% 
   group_by(value) %>% 
   summarise(count = n()) %>% 
-   arrange(desc(count)) %>% 
-  top_n(5)
-## Selecting by count
-## # A tibble: 5 × 2
+  slice_max(count, n = 5)
+## # A tibble: 8 × 2
 ##   value count
 ##   <int> <int>
-## 1    49    21
-## 2     1    20
-## 3    16    20
-## 4     2    18
-## 5    32    18
+## 1    19    19
+## 2    22    18
+## 3    33    18
+## 4    25    17
+## 5    23    16
+## 6    28    16
+## 7    42    16
+## 8    43    16
 ```
 
 ### Python
@@ -130,15 +133,16 @@ executed.
 import pandas as pd
 
 data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
+## <string>:2: UserWarning: Parsing dates in DD/MM/YYYY format when dayfirst=False (the default) was specified. This may lead to inconsistently parsed dates! Specify a format to ensure consistent parsing.
 
 res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_values(ascending = False)
 
 print(res.head(5))
 ## value
-## 6     633
-## 49    621
-## 32    608
-## 11    605
-## 31    600
+## 6     646
+## 49    632
+## 32    620
+## 31    615
+## 33    614
 ## Name: value, dtype: int64
 ```
