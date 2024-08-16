@@ -4,7 +4,7 @@ output: rmarkdown::github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2023)
+# API for the lotto numbers of the german lottery (1955-2024)
 
 ```{r setup, include=FALSE, echo = FALSE}
 knitr::opts_chunk$set(collapse = TRUE,
@@ -37,7 +37,6 @@ In the next chunk, all data are read, filtered (just taking the lotto numbers) a
 ```{r, message=FALSE}
 library(tidyverse)
 library(jsonlite)
-library(lubridate)
 
 data <- fromJSON("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
 
@@ -107,7 +106,7 @@ In python the module [pandas](http://pandas.pydata.org) is very handy to analyse
 ```{python, engine.path = '/usr/local/bin/python3'}
 import pandas as pd
 
-data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
+data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json", convert_dates = False)
 
 res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_values(ascending = False)
 

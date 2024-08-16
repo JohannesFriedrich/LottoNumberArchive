@@ -33,7 +33,6 @@ We can see, that lotto number 6 is the most frequent number.
 ``` r
 library(tidyverse)
 library(jsonlite)
-library(lubridate)
 
 data <- fromJSON("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
 
@@ -48,16 +47,14 @@ lottonumbers_count %>%
   arrange(desc(count)) %>% 
   top_n(5)
 ## Selecting by count
-## # A tibble: 7 × 2
+## # A tibble: 5 × 2
 ##   value count
 ##   <int> <int>
-## 1     6   646
-## 2    49   632
-## 3    32   620
-## 4    31   615
-## 5    22   614
-## 6    26   614
-## 7    33   614
+## 1     6   652
+## 2    49   641
+## 3    32   626
+## 4    31   625
+## 5    33   625
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -132,17 +129,16 @@ executed.
 ``` python
 import pandas as pd
 
-data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
-## <string>:2: UserWarning: Parsing dates in DD/MM/YYYY format when dayfirst=False (the default) was specified. This may lead to inconsistently parsed dates! Specify a format to ensure consistent parsing.
+data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json", convert_dates = False)
 
 res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_values(ascending = False)
 
 print(res.head(5))
 ## value
-## 6     646
-## 49    632
-## 32    620
-## 31    615
-## 33    614
+## 6     652
+## 49    641
+## 32    626
+## 33    625
+## 31    625
 ## Name: value, dtype: int64
 ```
