@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2024)
+# API for the lotto numbers of the german lottery (1955-2025)
 
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
@@ -23,38 +23,36 @@ languages. In the following two examples are shown (R and Python).
 
 ### R
 
-The package [tidyverse](https://www.tidyverse.org) is able to analyze
-the data very quickly with R.
+The package [dplyr](https://dplyr.tidyverse.org/) is able to analyze the
+data very quickly with R.
 
 In the next chunk, all data are read, filtered (just taking the lotto
 numbers) and grouped by the values and counted the number of appearance.
 We can see, that lotto number 6 is the most frequent number.
 
 ``` r
-library(tidyverse)
-library(jsonlite)
+data <- jsonlite::fromJSON("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
 
-data <- fromJSON("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
-
-lottonumbers_count <- data %>% 
-  filter(variable == "Lottozahl") %>% 
-  group_by(value) %>% 
-  summarise(count = n())
+lottonumbers_count <- data |> 
+  dplyr::filter(variable == "Lottozahl") |> 
+  dplyr::group_by(value) |> 
+  dplyr::summarise(count = dplyr::n())
 ```
 
 ``` r
-lottonumbers_count %>% 
-  arrange(desc(count)) %>% 
-  top_n(5)
+lottonumbers_count |> 
+  dplyr::arrange(dplyr::desc(count)) |>  
+  dplyr::top_n(5)
 ## Selecting by count
-## # A tibble: 5 × 2
+## # A tibble: 6 × 2
 ##   value count
 ##   <int> <int>
-## 1     6   652
-## 2    49   641
-## 3    32   626
-## 4    31   625
-## 5    33   625
+## 1     6   658
+## 2    49   645
+## 3    33   631
+## 4    32   630
+## 5    26   628
+## 6    31   628
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -74,14 +72,14 @@ introduced. Every Wednesday and Saturday the number chosen. The
 following graph shows the distribution of the Zusatzzahl.
 
 ``` r
-superzahl <- data %>% 
-  filter(variable == "Superzahl") %>% 
-  mutate(date = dmy(date),
+superzahl <- data |>  
+  dplyr::filter(variable == "Superzahl") |> 
+  dplyr::mutate(date = lubridate::dmy(date),
          Day = weekdays(date),
-         year = year(date)) %>% 
-  filter(year >= 2001) %>% 
-  group_by(value, Day) %>% 
-  summarise(count = n())
+         year = lubridate::year(date)) |> 
+  dplyr::filter(year >= 2001) |> 
+  dplyr::group_by(value, Day) |>  
+  dplyr::summarise(count = dplyr::n())
 ## `summarise()` has grouped output by 'value'. You can override using the
 ## `.groups` argument.
 ```
@@ -96,28 +94,26 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 
 <img src="README_figs/README-unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
-What were the numbers most chosen in 2023?
+What were the numbers most chosen in 2024?
 
 ``` r
-data %>% 
-  filter(variable == "Lottozahl") %>% 
-  mutate(date = dmy(date),
-         year = year(date)) %>% 
-  filter(year == 2023) %>% 
-  group_by(value) %>% 
-  summarise(count = n()) %>% 
-  slice_max(count, n = 5)
-## # A tibble: 8 × 2
+data |>  
+  dplyr::filter(variable == "Lottozahl") |> 
+  dplyr::mutate(date = lubridate::dmy(date),
+         year = lubridate::year(date)) |>
+  dplyr::filter(year == 2024) |> 
+  dplyr::group_by(value) |>  
+  dplyr::summarise(count = dplyr::n()) |> 
+  dplyr::slice_max(count, n = 5)
+## # A tibble: 6 × 2
 ##   value count
 ##   <int> <int>
-## 1    19    19
-## 2    22    18
-## 3    33    18
-## 4    25    17
-## 5    23    16
-## 6    28    16
-## 7    42    16
-## 8    43    16
+## 1     8    24
+## 2     5    22
+## 3     9    22
+## 4    40    22
+## 5    10    18
+## 6    30    18
 ```
 
 ### Python
@@ -135,10 +131,10 @@ res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_
 
 print(res.head(5))
 ## value
-## 6     652
-## 49    641
-## 32    626
-## 33    625
-## 31    625
+## 6     658
+## 49    645
+## 33    631
+## 32    630
+## 31    628
 ## Name: value, dtype: int64
 ```

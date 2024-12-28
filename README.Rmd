@@ -4,7 +4,7 @@ output: rmarkdown::github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2024)
+# API for the lotto numbers of the german lottery (1955-2025)
 
 ```{r setup, include=FALSE, echo = FALSE}
 knitr::opts_chunk$set(collapse = TRUE,
@@ -30,26 +30,23 @@ The data provided is a JSON file and readable by all modern software languages. 
 
 ### R
 
-The package [tidyverse](https://www.tidyverse.org) is able to analyze the data very quickly with R.
+The package [dplyr](https://dplyr.tidyverse.org/) is able to analyze the data very quickly with R.
 
 In the next chunk, all data are read, filtered (just taking the lotto numbers) and grouped by the values and counted the number of appearance. We can see, that lotto number 6 is the most frequent number.
 
 ```{r, message=FALSE}
-library(tidyverse)
-library(jsonlite)
+data <- jsonlite::fromJSON("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
 
-data <- fromJSON("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json")
-
-lottonumbers_count <- data %>% 
-  filter(variable == "Lottozahl") %>% 
-  group_by(value) %>% 
-  summarise(count = n())
+lottonumbers_count <- data |> 
+  dplyr::filter(variable == "Lottozahl") |> 
+  dplyr::group_by(value) |> 
+  dplyr::summarise(count = dplyr::n())
 ```
 
 ```{r}
-lottonumbers_count %>% 
-  arrange(desc(count)) %>% 
-  top_n(5)
+lottonumbers_count |> 
+  dplyr::arrange(dplyr::desc(count)) |>  
+  dplyr::top_n(5)
 ```
 
 
@@ -67,14 +64,14 @@ ggplot(lottonumbers_count, aes(value, count)) +
 Since 2001 in the german lottery a number called "Zusatzzahl" was introduced. Every Wednesday and Saturday the number chosen. The following graph shows the distribution of the Zusatzzahl.
 
 ```{r}
-superzahl <- data %>% 
-  filter(variable == "Superzahl") %>% 
-  mutate(date = dmy(date),
+superzahl <- data |>  
+  dplyr::filter(variable == "Superzahl") |> 
+  dplyr::mutate(date = lubridate::dmy(date),
          Day = weekdays(date),
-         year = year(date)) %>% 
-  filter(year >= 2001) %>% 
-  group_by(value, Day) %>% 
-  summarise(count = n())
+         year = lubridate::year(date)) |> 
+  dplyr::filter(year >= 2001) |> 
+  dplyr::group_by(value, Day) |>  
+  dplyr::summarise(count = dplyr::n())
 ```
 
 ```{r}
@@ -85,17 +82,17 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
   labs(x = "Zusatzzahl", title = "Zusatzzahl since 2001")
 ```
 
-What were the numbers most chosen in 2023?
+What were the numbers most chosen in 2024?
 
 ```{r}
-data %>% 
-  filter(variable == "Lottozahl") %>% 
-  mutate(date = dmy(date),
-         year = year(date)) %>% 
-  filter(year == 2023) %>% 
-  group_by(value) %>% 
-  summarise(count = n()) %>% 
-  slice_max(count, n = 5)
+data |>  
+  dplyr::filter(variable == "Lottozahl") |> 
+  dplyr::mutate(date = lubridate::dmy(date),
+         year = lubridate::year(date)) |>
+  dplyr::filter(year == 2024) |> 
+  dplyr::group_by(value) |>  
+  dplyr::summarise(count = dplyr::n()) |> 
+  dplyr::slice_max(count, n = 5)
 ```
 
 
@@ -103,7 +100,7 @@ data %>%
 
 In python the module [pandas](http://pandas.pydata.org) is very handy to analyse data. In the following the same analysis as shown above will be executed.
 
-```{python, engine.path = '/usr/local/bin/python3'}
+```{python, engine.path = '/Library/Frameworks/Python.framework/Versions/3.13/bin/python3'}
 import pandas as pd
 
 data = pd.read_json("https://johannesfriedrich.github.io/LottoNumberArchive/Lottonumbers_tidy_complete.json", convert_dates = False)
