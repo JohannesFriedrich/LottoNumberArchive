@@ -4,7 +4,7 @@ output: rmarkdown::github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2025)
+# API for the lotto numbers of the german lottery (1955-2026)
 
 ```{r setup, include=FALSE, echo = FALSE}
 knitr::opts_chunk$set(collapse = TRUE,
@@ -39,8 +39,7 @@ data <- jsonlite::fromJSON("https://johannesfriedrich.github.io/LottoNumberArchi
 
 lottonumbers_count <- data |> 
   dplyr::filter(variable == "Lottozahl") |> 
-  dplyr::group_by(value) |> 
-  dplyr::summarise(count = dplyr::n())
+  dplyr::count(value, name="count")
 ```
 
 ```{r}
@@ -70,8 +69,7 @@ superzahl <- data |>
          Day = weekdays(date),
          year = lubridate::year(date)) |> 
   dplyr::filter(year >= 2001) |> 
-  dplyr::group_by(value, Day) |>  
-  dplyr::summarise(count = dplyr::n())
+  dplyr::count(value, Day, name="count")
 ```
 
 ```{r}
@@ -82,14 +80,14 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
   labs(x = "Zusatzzahl", title = "Zusatzzahl since 2001")
 ```
 
-What were the numbers most chosen in 2024?
+What were the numbers most chosen in 2025?
 
 ```{r}
 data |>  
   dplyr::filter(variable == "Lottozahl") |> 
   dplyr::mutate(date = lubridate::dmy(date),
          year = lubridate::year(date)) |>
-  dplyr::filter(year == 2024) |> 
+  dplyr::filter(year == 2025) |> 
   dplyr::group_by(value) |>  
   dplyr::summarise(count = dplyr::n()) |> 
   dplyr::slice_max(count, n = 5)

@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# API for the lotto numbers of the german lottery (1955-2025)
+# API for the lotto numbers of the german lottery (1955-2026)
 
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
@@ -35,8 +35,7 @@ data <- jsonlite::fromJSON("https://johannesfriedrich.github.io/LottoNumberArchi
 
 lottonumbers_count <- data |> 
   dplyr::filter(variable == "Lottozahl") |> 
-  dplyr::group_by(value) |> 
-  dplyr::summarise(count = dplyr::n())
+  dplyr::count(value, name="count")
 ```
 
 ``` r
@@ -44,15 +43,13 @@ lottonumbers_count |>
   dplyr::arrange(dplyr::desc(count)) |>  
   dplyr::top_n(5)
 ## Selecting by count
-## # A tibble: 6 × 2
 ##   value count
-##   <int> <int>
-## 1     6   658
-## 2    49   645
-## 3    33   631
-## 4    32   630
-## 5    26   628
-## 6    31   628
+## 1     6   672
+## 2    49   652
+## 3    26   644
+## 4    11   641
+## 5    32   641
+## 6    33   641
 ```
 
 Now we want to summarise all numbers from 1-49 and their appearance.
@@ -78,10 +75,7 @@ superzahl <- data |>
          Day = weekdays(date),
          year = lubridate::year(date)) |> 
   dplyr::filter(year >= 2001) |> 
-  dplyr::group_by(value, Day) |>  
-  dplyr::summarise(count = dplyr::n())
-## `summarise()` has grouped output by 'value'. You can override using the
-## `.groups` argument.
+  dplyr::count(value, Day, name="count")
 ```
 
 ``` r
@@ -94,26 +88,25 @@ ggplot(superzahl, aes(value, count, fill = Day)) +
 
 <img src="README_figs/README-unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" />
 
-What were the numbers most chosen in 2024?
+What were the numbers most chosen in 2025?
 
 ``` r
 data |>  
   dplyr::filter(variable == "Lottozahl") |> 
   dplyr::mutate(date = lubridate::dmy(date),
          year = lubridate::year(date)) |>
-  dplyr::filter(year == 2024) |> 
+  dplyr::filter(year == 2025) |> 
   dplyr::group_by(value) |>  
   dplyr::summarise(count = dplyr::n()) |> 
   dplyr::slice_max(count, n = 5)
-## # A tibble: 6 × 2
+## # A tibble: 5 × 2
 ##   value count
 ##   <int> <int>
-## 1     8    24
-## 2     5    22
-## 3     9    22
-## 4    40    22
-## 5    10    18
-## 6    30    18
+## 1    13    22
+## 2    20    21
+## 3    37    20
+## 4    28    19
+## 5    44    19
 ```
 
 ### Python
@@ -131,10 +124,10 @@ res = data[data.variable == "Lottozahl"].groupby("value")["value"].count().sort_
 
 print(res.head(5))
 ## value
-## 6     658
-## 49    645
-## 33    631
-## 32    630
-## 31    628
+## 6     672
+## 49    652
+## 26    644
+## 11    641
+## 32    641
 ## Name: value, dtype: int64
 ```
